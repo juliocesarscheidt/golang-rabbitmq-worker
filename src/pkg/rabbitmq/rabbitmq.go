@@ -5,7 +5,7 @@ import (
 )
 
 func OpenChannel() (*amqp.Channel, error) {
-	conn, err := amqp.Dial("amqp://rabbitmq:rabbitmq@localhost:5672/")
+	conn, err := amqp.Dial("amqp://rabbitmq:rabbitmq@127.0.0.1:5672/")
 	if err != nil {
 		panic(err)
 	}

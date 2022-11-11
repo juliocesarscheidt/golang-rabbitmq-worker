@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+	// db, err := sql.Open("sqlite3", ":memory:")
 	db, err := sql.Open("sqlite3", "./orders.db")
 	if err != nil {
 		panic(err)

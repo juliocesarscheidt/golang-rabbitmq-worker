@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/juliocesarscheidt/golang-rabbitmq-worker/internal/order/entity"
 	"github.com/google/uuid"
+	"github.com/juliocesarscheidt/golang-rabbitmq-worker/internal/order/entity"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -16,8 +16,8 @@ func Publish(ch *amqp.Channel, order entity.Order) error {
 		return err
 	}
 	err = ch.Publish(
-		"amq.direct",
 		"",
+		"orders",
 		false,
 		false,
 		amqp.Publishing{
@@ -40,7 +40,7 @@ func GenerateOrders() entity.Order {
 }
 
 func main() {
-	conn, err := amqp.Dial("amqp://rabbitmq:rabbitmq@localhost:5672/")
+	conn, err := amqp.Dial("amqp://rabbitmq:rabbitmq@127.0.0.1:5672/")
 	if err != nil {
 		panic(err)
 	}
