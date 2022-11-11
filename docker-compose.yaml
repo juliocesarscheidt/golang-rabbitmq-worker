@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: juliocesarmidia/rabbitmq:latest
+    build:
+      context: ./rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+      - 15692:15692 # prometheus
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: /
+    networks:
+      - subnet_0
+    restart: on-failure
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    command: [
+      "--config.file=/etc/prometheus/prometheus.yaml",
+      "--storage.tsdb.path=/prometheus",
+      "--web.console.libraries=/usr/share/prometheus/console_libraries",
+      "--web.console.templates=/usr/share/prometheus/consoles"
+    ]
+    volumes:
+      - ./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - prometheus-data:/prometheus
+    ports:
+      - 9090:9090
+    networks:
+      - subnet_0
+    restart: on-failure
+
+networks:
+  subnet_0:
+    driver: bridge
+
+volumes:
+  prometheus-data: {}
+
+secrets: {}
