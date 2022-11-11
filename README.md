@@ -13,7 +13,8 @@ docker-compose logs -f --tail 100 prometheus
 cd src
 go mod download
 
-go run cmd/producer/main.go
-go run cmd/consumer/main.go
+go run cmd/producer/main.go -qtyOrdersToProduce 10
+
+go run cmd/consumer/main.go -qtyWorkersToConsume 4
 
 ```

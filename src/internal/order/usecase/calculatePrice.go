@@ -3,23 +3,11 @@ package usecase
 import (
 	"github.com/juliocesarscheidt/golang-rabbitmq-worker/internal/order/entity"
 	"github.com/juliocesarscheidt/golang-rabbitmq-worker/internal/order/infra/database"
+	"github.com/juliocesarscheidt/golang-rabbitmq-worker/internal/dto"
 
 	// sqlite3
 	_ "github.com/mattn/go-sqlite3"
 )
-
-type OrderInputDTO struct {
-	ID    string
-	Price float64
-	Tax   float64
-}
-
-type OrderOutputDTO struct {
-	ID         string
-	Price      float64
-	Tax        float64
-	FinalPrice float64
-}
 
 type CalculateFinalPriceUseCase struct {
 	OrderRepository entity.OrderRepositoryInterface
@@ -31,7 +19,7 @@ func NewCalculateFinalPriceUseCase(orderRepository database.OrderRepository) *Ca
 	}
 }
 
-func (c *CalculateFinalPriceUseCase) Execute(input OrderInputDTO) (*OrderOutputDTO, error) {
+func (c *CalculateFinalPriceUseCase) Execute(input dto.OrderInputDTO) (*dto.OrderOutputDTO, error) {
 	order, err := entity.NewOrder(input.ID, input.Price, input.Tax)
 	if err != nil {
 		return nil, err
@@ -44,7 +32,7 @@ func (c *CalculateFinalPriceUseCase) Execute(input OrderInputDTO) (*OrderOutputD
 	if err != nil {
 		return nil, err
 	}
-	return &OrderOutputDTO{
+	return &dto.OrderOutputDTO{
 		ID:         order.ID,
 		Price:      order.Price,
 		Tax:        order.Tax,

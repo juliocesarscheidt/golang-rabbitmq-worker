@@ -11,7 +11,11 @@ RUN apt-get update -yqq && \
 COPY rabbitmq-config.sh /rabbitmq-config.sh
 COPY rabbitmq-entrypoint.sh /rabbitmq-entrypoint.sh
 
-RUN rabbitmq-plugins enable rabbitmq_stream rabbitmq_prometheus
+RUN rabbitmq-plugins enable rabbitmq_stream
+RUN rabbitmq-plugins enable rabbitmq_prometheus
+RUN rabbitmq-plugins enable rabbitmq_tracing
+RUN rabbitmq-plugins enable rabbitmq_shovel rabbitmq_shovel_management
+RUN rabbitmq-plugins list
 
 ENTRYPOINT ["/bin/bash", "/rabbitmq-entrypoint.sh"]
 CMD "rabbitmq-server"
